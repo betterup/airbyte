@@ -77,3 +77,16 @@ ENTRYPOINT ["/airbyte/entrypoint.sh"]
 
 LABEL io.airbyte.version=0.2.5
 LABEL io.airbyte.name=airbyte/normalization-snowflake
+
+RUN adduser -s /bin/sh -u 1000 -D dbt_user
+
+RUN pip uninstall setuptools -y && \
+    PATH=$ROOTPATH pip uninstall setuptools -y && \
+    pip uninstall pip -y && \
+    PATH=$ROOTPATH pip uninstall pip -y && \
+    rm -rf /usr/local/lib/python3.10/ensurepip && \
+    apk --purge del apk-tools py-pip && \
+    # remove unnecessary private keys
+    find /opt/ /usr/ -name '*.pem' | grep test | xargs rm
+
+USER dbt_user
