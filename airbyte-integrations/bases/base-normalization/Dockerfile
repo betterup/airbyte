@@ -81,6 +81,9 @@ LABEL io.airbyte.name=airbyte/normalization
 
 RUN adduser -s /bin/sh -u 1000 -D dbt_user
 
+# patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
+RUN pip install sqlparse==0.4.4
+
 RUN pip uninstall setuptools -y && \
     PATH=$ROOTPATH pip uninstall setuptools -y && \
     pip uninstall pip -y && \

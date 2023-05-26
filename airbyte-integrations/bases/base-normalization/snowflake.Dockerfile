@@ -43,9 +43,7 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 ENV PATH=$REQUIREPATH
 
 RUN pip install --upgrade pip && \
-    pip install dbt-core && \
-    # patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
-    pip install sqlparse==0.4.4
+    pip install dbt-core
 
 COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 
@@ -79,6 +77,9 @@ ENTRYPOINT ["/airbyte/entrypoint.sh"]
 
 LABEL io.airbyte.version=0.2.5
 LABEL io.airbyte.name=airbyte/normalization-snowflake
+
+# patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
+RUN pip install sqlparse==0.4.4
 
 RUN adduser -s /bin/sh -u 1000 -D dbt_user
 
