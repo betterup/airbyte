@@ -46,7 +46,7 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 
 ENV PATH=$REQUIREPATH
 
-RUN pip install --upgrade pip &&
+RUN pip install --upgrade pip && \
     pip install dbt-core
 
 # installs airbyte dependencies
