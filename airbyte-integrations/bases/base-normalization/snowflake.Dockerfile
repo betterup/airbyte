@@ -43,7 +43,9 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 ENV PATH=$REQUIREPATH
 
 RUN pip install --upgrade pip && \
-    pip install dbt-core
+    pip install dbt-core && \
+    # patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
+    pip install sqlparse==0.4.4
 
 COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 
