@@ -6,6 +6,8 @@ RUN apk update &&\
     apk upgrade &&\
     apk add --no-cache build-base openssl-dev libffi-dev zlib-dev bzip2-dev dpkg jq sshpass
 
+# compiles python
+
 ENV PYTHON_MINOR=11
 ENV PYTHON_PATCH=3
 ENV PYTHON_VERSION=3.${PYTHON_MINOR}.${PYTHON_PATCH}
@@ -26,18 +28,16 @@ COPY --from=python-src /downloads/ /usr/src/
 
 # forces extra space for proper checksum
 # https://github.com/alpinelinux/docker-alpine/issues/246
-RUN \
-# install python w/out fips
-cd /usr/src/Python-${PYTHON_VERSION} && \
-./configure --with-ensure-pip --enable-optimizations && \
-make && \
-make install && \
-make clean && \
-update-alternatives \
-    --install /usr/bin/python python /usr/local/bin/python3.${PYTHON_MINOR} 10 \
-    --force && \
-update-alternatives \
-    --install /usr/bin/pip pip /usr/local/bin/pip3.${PYTHON_MINOR} 10 --force
+RUN cd /usr/src/Python-${PYTHON_VERSION} && \
+    ./configure --with-ensure-pip --enable-optimizations && \
+    make && \
+    make install && \
+    make clean && \
+    update-alternatives \
+        --install /usr/bin/python python /usr/local/bin/python3.${PYTHON_MINOR} 10 \
+        --force && \
+    update-alternatives \
+        --install /usr/bin/pip pip /usr/local/bin/pip3.${PYTHON_MINOR} 10 --force
 
 ENV ROOTPATH="/usr/local/bin:$PATH"
 ENV REQUIREPATH="/opt/.venv/bin:$PATH"
@@ -47,6 +47,9 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 ENV PATH=$REQUIREPATH
 
 RUN pip install --upgrade pip
+
+# installs airbyte dependencies
+COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 
 WORKDIR /airbyte
 COPY entrypoint.sh .
@@ -74,3 +77,5 @@ ENTRYPOINT ["/airbyte/entrypoint.sh"]
 
 LABEL io.airbyte.version=0.4.3
 LABEL io.airbyte.name=airbyte/normalization
+
+# cleanup package managers
