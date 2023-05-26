@@ -52,7 +52,7 @@ RUN pip install --upgrade pip && \
 COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 
 # Install SSH Tunneling dependencies
-RUN apt-get update && apt-get install -y jq sshpass
+RUN apk add --update jq sshpass
 
 WORKDIR /airbyte
 COPY entrypoint.sh .
