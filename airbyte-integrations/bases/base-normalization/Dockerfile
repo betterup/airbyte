@@ -70,7 +70,7 @@ RUN pip install .
 
 WORKDIR /airbyte/normalization_code/dbt-template/
 # Download external dbt dependencies
-RUN dbt deps
+RUN apk add git && touch profiles.yml && dbt deps --profiles-dir . && apk del git
 
 WORKDIR /airbyte
 ENV AIRBYTE_ENTRYPOINT "/airbyte/entrypoint.sh"
