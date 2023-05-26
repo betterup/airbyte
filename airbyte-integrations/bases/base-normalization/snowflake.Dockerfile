@@ -15,8 +15,6 @@ ENV PYTHON_SHA256=1a79f3df32265d9e6625f1a0b31c28eb1594df911403d11f3320ee1da1b3e0
 
 FROM base as python-src
 ENV PYTHON_URL=https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
-# injects space for proper checksum in alpine/busybox
-# https://github.com/alpinelinux/docker-alpine/issues/246
 COPY entrypoint.sh /usr/bin/
 COPY download-src /usr/bin/
 RUN chmod 755 /usr/bin/download-src
@@ -26,8 +24,6 @@ FROM base as python-base
 
 COPY --from=python-src /downloads/ /usr/src/
 
-# forces extra space for proper checksum
-# https://github.com/alpinelinux/docker-alpine/issues/246
 RUN cd /usr/src/Python-${PYTHON_VERSION} && \
     ./configure --with-ensure-pip --enable-optimizations && \
     make && \
@@ -73,7 +69,7 @@ RUN pip install .
 
 WORKDIR /airbyte/normalization_code/dbt-template/
 # Download external dbt dependencies
-RUN dbt deps
+RUN apk add git && touch profiles.yml && dbt deps --profiles-dir . && apk del git
 
 WORKDIR /airbyte
 ENV AIRBYTE_ENTRYPOINT "/airbyte/entrypoint.sh"
