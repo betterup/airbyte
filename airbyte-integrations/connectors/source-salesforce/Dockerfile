@@ -15,12 +15,11 @@ ENV PYTHON_SHA256=1a79f3df32265d9e6625f1a0b31c28eb1594df911403d11f3320ee1da1b3e0
 
 FROM base as python-src
 ENV PYTHON_URL=https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
-# injects space for proper checksum in alpine/busybox
-# https://github.com/alpinelinux/docker-alpine/issues/246
-COPY entrypoint.sh /usr/bin/
-COPY download-src /usr/bin/
-RUN chmod 755 /usr/bin/download-src
-RUN download-src $PYTHON_URL "$PYTHON_SHA256 "
+RUN wget $PYTHON_URL && \
+    FILENAME=$(basename $PYTHON_URL) && \
+    tar -xzvf $FILENAME
+    rm $FILENAME
+
 
 FROM base as python-base
 
