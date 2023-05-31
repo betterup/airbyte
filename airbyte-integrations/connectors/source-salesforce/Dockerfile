@@ -3,6 +3,13 @@ FROM python:3.11-alpine3.18
 ENV ROOTPATH="/usr/local/bin:$PATH"
 ENV REQUIREPATH="/opt/.venv/bin:$PATH"
 
+RUN apk add --update --no-cache \
+    build-base \
+    openssl-dev \
+    libffi-dev \
+    zlib-dev \
+    bzip2-dev
+
 RUN PATH=$ROOTPATH python -m venv /opt/.venv
 
 ENV PATH=$REQUIREPATH
