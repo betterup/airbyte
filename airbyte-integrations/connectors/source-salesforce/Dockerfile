@@ -14,7 +14,9 @@ ENV PYTHON_VERSION=3.${PYTHON_MINOR}.${PYTHON_PATCH}
 
 FROM base as python-src
 ENV PYTHON_URL=https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz
-RUN wget $PYTHON_URL && \
+RUN mkdir /downloads && \
+    cd /downloads && \
+    wget $PYTHON_URL && \
     FILENAME=$(basename $PYTHON_URL) && \
     tar -xzvf $FILENAME && \
     rm $FILENAME
