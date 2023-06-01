@@ -10,6 +10,8 @@ RUN tar xf ${APPLICATION}.tar --strip-components=1 && rm -rf ${APPLICATION}.tar
 
 FROM airbyte/integration-base-java:dev
 
+RUN apk add --update bash
+
 WORKDIR /airbyte
 
 ENV APPLICATION source-postgres
