@@ -11,6 +11,10 @@ WORKDIR /airbyte
 
 ENV APPLICATION destination-snowflake
 
+RUN addgroup -S appgroup && \
+    adduser -S appuser -G appgroup -u 1000
+RUN chown appuser:appgroup -R /airbyte
+USER appuser
 # Needed for JDK17 (in turn, needed on M1 macs) - see https://github.com/snowflakedb/snowflake-jdbc/issues/589#issuecomment-983944767
 #ENV DESTINATION_SNOWFLAKE_OPTS "--add-opens java.base/java.nio=ALL-UNNAMED"
 
@@ -20,10 +24,6 @@ RUN tar xf ${APPLICATION}.tar --strip-components=1
 
 ENV ENABLE_SENTRY true
 
-# silently breaking when running as non-root
-# RUN addgroup -S appgroup && \
-#     adduser -S appuser -G appgroup -u 1000
-# USER appuser
 
 LABEL io.airbyte.version=1.0.3
 LABEL io.airbyte.name=airbyte/destination-snowflake
