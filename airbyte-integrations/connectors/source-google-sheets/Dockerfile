@@ -34,9 +34,10 @@ COPY source_google_sheets ./source_google_sheets
 RUN pip uninstall setuptools -y && \
     pip uninstall pip -y
 
-RUN addgroup -S appgroup && \
-    adduser -S appuser -G appgroup -u 1000
-USER appuser
+# silently breaking when running as non-root
+# RUN addgroup -S appgroup && \
+#     adduser -S appuser -G appgroup -u 1000
+# USER appuser
 
 ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/main.py"
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
