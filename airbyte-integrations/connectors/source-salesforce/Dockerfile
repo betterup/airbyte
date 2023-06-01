@@ -25,8 +25,10 @@ RUN pip install .
 RUN pip uninstall setuptools -y && \
     pip uninstall pip -y
 
-RUN adduser -s /bin/sh -u 1000 -D appuser
-USER appuser
+# silently breaking when running as non-root
+# RUN addgroup -S appgroup && \
+#     adduser -S appuser -G appgroup -u 1000
+# USER appuser
 
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
 
