@@ -5,8 +5,8 @@ FROM amazoncorretto:${JDK_VERSION}
 COPY --from=airbyte/integration-base:dev /airbyte /airbyte
 
 #RUN yum install -y tar openssl && yum clean all
-RUN apk add tar && \
-    apk update && apk upgrade && apk upgrade -U openssl && \
+RUN apk add --update bash tar && \
+    apk upgrade && apk upgrade -U openssl && \
     apk del openldap
 
 WORKDIR /airbyte
