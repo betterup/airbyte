@@ -53,8 +53,6 @@ LABEL io.airbyte.name=airbyte/normalization-snowflake
 # patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
 RUN pip install sqlparse==0.4.4
 
-RUN adduser -s /bin/sh -u 1000 -D dbt_user
-
 RUN pip uninstall setuptools -y && \
     PATH=$ROOTPATH pip uninstall setuptools -y && \
     pip uninstall pip -y && \
@@ -63,5 +61,3 @@ RUN pip uninstall setuptools -y && \
     apk --purge del apk-tools py-pip && \
     # remove unnecessary private keys
     find /opt/ /usr/ -name '*.pem' | grep test | xargs rm
-
-USER dbt_user
