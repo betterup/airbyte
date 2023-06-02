@@ -5,7 +5,8 @@ RUN apk add --update --no-cache \
     openssl-dev \
     libffi-dev \
     zlib-dev \
-    bzip2-dev
+    bzip2-dev \
+    bash
 
 ENV ROOTPATH="/usr/local/bin:$PATH"
 ENV REQUIREPATH="/opt/.venv/bin:$PATH"
