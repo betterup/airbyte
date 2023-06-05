@@ -17,7 +17,7 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 ENV PATH=$REQUIREPATH
 
 RUN pip install --upgrade pip && \
-    pip install dbt-core dbt-snowflake
+    pip install dbt-core dbt-snowflake --no-use-pep517
 
 COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 
