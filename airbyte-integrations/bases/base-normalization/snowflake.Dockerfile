@@ -6,7 +6,8 @@ RUN apk add --update --no-cache \
     libffi-dev \
     zlib-dev \
     bzip2-dev \
-    bash
+    bash \
+    git
 
 ENV ROOTPATH="/usr/local/bin:$PATH"
 ENV REQUIREPATH="/opt/.venv/bin:$PATH"
@@ -16,7 +17,7 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 ENV PATH=$REQUIREPATH
 
 RUN pip install --upgrade pip && \
-    pip install dbt-core
+    pip install dbt-core dbt-snowflake
 
 COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 
@@ -42,7 +43,7 @@ RUN pip install .
 
 WORKDIR /airbyte/normalization_code/dbt-template/
 # Download external dbt dependencies
-RUN apk add git && touch profiles.yml && dbt deps --profiles-dir . && apk del git
+RUN touch profiles.yml && dbt deps --profiles-dir .
 
 WORKDIR /airbyte
 ENV AIRBYTE_ENTRYPOINT "/airbyte/entrypoint.sh"
