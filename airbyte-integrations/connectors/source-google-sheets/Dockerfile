@@ -25,7 +25,9 @@ COPY --from=builder /usr/share/zoneinfo/Etc/UTC /etc/localtime
 RUN echo "Etc/UTC" > /etc/timezone
 
 # bash is installed for more convenient debugging.
-RUN apk --no-cache add bash
+RUN apk --no-cache add bash && \
+    # upgrading openssl due to https://nvd.nist.gov/vuln/detail/CVE-2023-2650
+    apk upgrade
 
 # copy payload code only
 COPY main.py ./
