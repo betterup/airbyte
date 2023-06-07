@@ -31,6 +31,9 @@ RUN pip uninstall setuptools -y && \
 #     adduser -S appuser -G appgroup -u 1000
 # USER appuser
 
+ENV TZ UTC
+RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
 
 LABEL io.airbyte.version=2.0.12
