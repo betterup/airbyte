@@ -21,7 +21,7 @@ COPY source_salesforce ./source_salesforce
 COPY setup.py ./
 COPY main.py ./
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install . --no-use-pep517
+    pip install .
 
 RUN pip uninstall setuptools -y && \
     pip uninstall pip -y
