@@ -1,4 +1,4 @@
-FROM python:3.11-alpine3.18
+FROM python:3.9-alpine3.18
 
 ENV ROOTPATH="/usr/local/bin:$PATH"
 ENV REQUIREPATH="/opt/.venv/bin:$PATH"
@@ -20,7 +20,8 @@ WORKDIR /airbyte/integration_code
 COPY source_salesforce ./source_salesforce
 COPY setup.py ./
 COPY main.py ./
-RUN pip install .
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install . --no-use-pep517
 
 RUN pip uninstall setuptools -y && \
     pip uninstall pip -y
