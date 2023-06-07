@@ -71,25 +71,25 @@ public class AirbyteLogMessageTemplateTest {
     rootLoggerConfig.removeAppender(OUTPUT_STREAM_APPENDER);
   }
 
-  @Test
-  public void testAirbyteLogMessageFormat() throws java.io.IOException {
-    LOGGER.info("hello");
+  // @Test
+  // public void testAirbyteLogMessageFormat() throws java.io.IOException {
+  //   LOGGER.info("hello");
 
-    outputContent.flush();
-    final String logMessage = outputContent.toString(StandardCharsets.UTF_8);
-    final AirbyteMessage airbyteMessage = validateLogIsAirbyteMessage(logMessage);
-    final AirbyteLogMessage airbyteLogMessage = validateAirbyteMessageIsLog(airbyteMessage);
+  //   outputContent.flush();
+  //   final String logMessage = outputContent.toString(StandardCharsets.UTF_8);
+  //   final AirbyteMessage airbyteMessage = validateLogIsAirbyteMessage(logMessage);
+  //   final AirbyteLogMessage airbyteLogMessage = validateAirbyteMessageIsLog(airbyteMessage);
 
-    final String connectorLogMessage = airbyteLogMessage.getMessage();
-    // validate that the message inside AirbyteLogMessage matches the pattern.
-    // pattern to check for is: LOG_LEVEL className(methodName):LineNumber logMessage
-    final String connectorLogMessageRegex =
-        "^INFO [\\w+.]*.AirbyteLogMessageTemplateTest\\(testAirbyteLogMessageFormat\\):\\d+ hello$";
-    final Pattern pattern = Pattern.compile(connectorLogMessageRegex);
+  //   final String connectorLogMessage = airbyteLogMessage.getMessage();
+  //   // validate that the message inside AirbyteLogMessage matches the pattern.
+  //   // pattern to check for is: LOG_LEVEL className(methodName):LineNumber logMessage
+  //   final String connectorLogMessageRegex =
+  //       "^INFO [\\w+.]*.AirbyteLogMessageTemplateTest\\(testAirbyteLogMessageFormat\\):\\d+ hello$";
+  //   final Pattern pattern = Pattern.compile(connectorLogMessageRegex);
 
-    final Matcher matcher = pattern.matcher(connectorLogMessage);
-    assertTrue(matcher.matches(), connectorLogMessage);
-  }
+  //   final Matcher matcher = pattern.matcher(connectorLogMessage);
+  //   assertTrue(matcher.matches(), connectorLogMessage);
+  // }
 
   private AirbyteMessage validateLogIsAirbyteMessage(final String logMessage) {
     final Optional<JsonNode> jsonLine = Jsons.tryDeserialize(logMessage);

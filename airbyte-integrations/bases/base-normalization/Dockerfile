@@ -1,8 +1,24 @@
-FROM fishtownanalytics/dbt:1.0.0
-COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
+FROM python:3.11-alpine3.18
 
-# Install SSH Tunneling dependencies
-RUN apt-get update && apt-get install -y jq sshpass
+RUN apk add --update --no-cache \
+    build-base \
+    openssl-dev \
+    libffi-dev \
+    zlib-dev \
+    bzip2-dev
+
+ENV ROOTPATH="/usr/local/bin:$PATH"
+ENV REQUIREPATH="/opt/.venv/bin:$PATH"
+
+RUN PATH=$ROOTPATH python -m venv /opt/.venv
+
+ENV PATH=$REQUIREPATH
+
+RUN pip install --upgrade pip && \
+    pip install dbt-core
+
+# installs airbyte dependencies
+COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 
 WORKDIR /airbyte
 COPY entrypoint.sh .
@@ -22,7 +38,7 @@ RUN pip install .
 
 WORKDIR /airbyte/normalization_code/dbt-template/
 # Download external dbt dependencies
-RUN dbt deps
+RUN apk add git && touch profiles.yml && dbt deps --profiles-dir . && apk del git
 
 WORKDIR /airbyte
 ENV AIRBYTE_ENTRYPOINT "/airbyte/entrypoint.sh"
@@ -30,3 +46,19 @@ ENTRYPOINT ["/airbyte/entrypoint.sh"]
 
 LABEL io.airbyte.version=0.4.3
 LABEL io.airbyte.name=airbyte/normalization
+
+RUN adduser -s /bin/sh -u 1000 -D dbt_user
+
+# patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
+RUN pip install sqlparse==0.4.4
+
+RUN pip uninstall setuptools -y && \
+    PATH=$ROOTPATH pip uninstall setuptools -y && \
+    pip uninstall pip -y && \
+    PATH=$ROOTPATH pip uninstall pip -y && \
+    rm -rf /usr/local/lib/python3.10/ensurepip && \
+    apk --purge del apk-tools py-pip && \
+    # remove unnecessary private keys
+    find /opt/ /usr/ -name '*.pem' | grep test | xargs rm
+
+USER dbt_user

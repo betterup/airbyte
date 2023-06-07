@@ -1,4 +1,4 @@
-FROM python:3.9.11-alpine3.15 as base
+FROM python:3.9.16-alpine3.18 as base
 
 # build and load all requirements
 FROM base as builder
@@ -25,11 +25,21 @@ COPY --from=builder /usr/share/zoneinfo/Etc/UTC /etc/localtime
 RUN echo "Etc/UTC" > /etc/timezone
 
 # bash is installed for more convenient debugging.
-RUN apk --no-cache add bash
+RUN apk --no-cache add bash && \
+    # upgrading openssl due to https://nvd.nist.gov/vuln/detail/CVE-2023-2650
+    apk upgrade
 
 # copy payload code only
 COPY main.py ./
 COPY source_google_sheets ./source_google_sheets
+
+RUN pip uninstall setuptools -y && \
+    pip uninstall pip -y
+
+# silently breaking when running as non-root
+# RUN addgroup -S appgroup && \
+#     adduser -S appuser -G appgroup -u 1000
+# USER appuser
 
 ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/main.py"
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]

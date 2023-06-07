@@ -10,8 +10,8 @@ data:
   name: Snowflake
   normalizationConfig:
     normalizationIntegrationType: snowflake
-    normalizationRepository: airbyte/normalization-snowflake
-    normalizationTag: 0.4.3
+    normalizationRepository: 042958689892.dkr.ecr.us-gov-west-1.amazonaws.com/airbyte/normalization-snowflake
+    normalizationTag: 2023.6.1.ac69
   registries:
     cloud:
       enabled: true
