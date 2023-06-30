@@ -1,7 +1,9 @@
+# Using alpine to remove several vulnerabilities frm slim image
+# https://security-tracker.debian.org/tracker/CVE-2023-29383
+# https://security-tracker.debian.org/tracker/CVE-2023-31484
+# https://security-tracker.debian.org/tracker/CVE-2016-2781
 FROM python:3.9-alpine3.18
 
-ENV ROOTPATH="/usr/local/bin:$PATH"
-ENV REQUIREPATH="/opt/.venv/bin:$PATH"
 
 RUN apk add --update --no-cache \
     build-base \
@@ -10,9 +12,6 @@ RUN apk add --update --no-cache \
     zlib-dev \
     bzip2-dev
 
-RUN PATH=$ROOTPATH python -m venv /opt/.venv
-
-ENV PATH=$REQUIREPATH
 
 ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/main.py"
 
@@ -20,19 +19,18 @@ WORKDIR /airbyte/integration_code
 COPY source_salesforce ./source_salesforce
 COPY setup.py ./
 COPY main.py ./
+
+# Fixing https://nvd.nist.gov/vuln/detail/CVE-2022-40897
+# calling this twice as one upgrades the system pip /usr/local/bin/pip the
+# seconf time upgrades the under for the venv /opt/.venv/bin/pip
 RUN pip install --upgrade pip setuptools wheel && \
     pip install .
+RUN pip install --upgrade pip setuptools
 
-RUN pip uninstall setuptools -y && \
-    pip uninstall pip -y
-
-# silently breaking when running as non-root
-# RUN addgroup -S appgroup && \
-#     adduser -S appuser -G appgroup -u 1000
-# USER appuser
-
+# add default timezone settings
 ENV TZ UTC
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
 
