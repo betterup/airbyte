@@ -15,6 +15,9 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 ENV PATH=$REQUIREPATH
 
 RUN pip install --upgrade pip && \
+    # Fix for PyYAML build bug related to Cython 3.0
+    # https://github.com/yaml/pyyaml/issues/601
+    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
     pip install dbt-core
 
 # installs airbyte dependencies
