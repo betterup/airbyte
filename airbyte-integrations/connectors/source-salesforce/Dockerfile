@@ -21,6 +21,9 @@ COPY source_salesforce ./source_salesforce
 COPY setup.py ./
 COPY main.py ./
 RUN pip install --upgrade pip setuptools wheel && \
+    # Fix for PyYAML build bug related to Cython 3.0
+    # https://github.com/yaml/pyyaml/issues/601
+    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
     pip install .
 
 RUN pip uninstall setuptools -y && \

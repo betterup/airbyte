@@ -1,4 +1,4 @@
-FROM python:3.9.16-alpine3.18 as base
+FROM python:3.9-alpine3.18 as base
 
 # build and load all requirements
 FROM base as builder
@@ -34,6 +34,9 @@ COPY main.py ./
 COPY source_google_sheets ./source_google_sheets
 
 RUN pip uninstall setuptools -y && \
+    # Fix for PyYAML build bug related to Cython 3.0
+    # https://github.com/yaml/pyyaml/issues/601
+    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
     pip uninstall pip -y
 
 # silently breaking when running as non-root
