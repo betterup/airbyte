@@ -12,7 +12,11 @@ RUN apk --no-cache upgrade \
 
 COPY setup.py ./
 # install necessary packages to a temporary folder
-RUN pip install --prefix=/install .
+RUN \
+    # Fix for PyYAML build bug related to Cython 3.0
+    # https://github.com/yaml/pyyaml/issues/601
+    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
+    pip install --prefix=/install .
 
 # build a clean environment
 FROM base
@@ -33,10 +37,7 @@ RUN apk --no-cache add bash && \
 COPY main.py ./
 COPY source_google_sheets ./source_google_sheets
 
-RUN pip uninstall setuptools -y && \
-    # Fix for PyYAML build bug related to Cython 3.0
-    # https://github.com/yaml/pyyaml/issues/601
-    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
+RUN pip uninstall setuptools -y &&
     pip uninstall pip -y
 
 # silently breaking when running as non-root
