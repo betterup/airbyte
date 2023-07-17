@@ -37,7 +37,7 @@ RUN apk --no-cache add bash && \
 COPY main.py ./
 COPY source_google_sheets ./source_google_sheets
 
-RUN pip uninstall setuptools -y &&
+RUN pip uninstall setuptools -y && \
     pip uninstall pip -y
 
 # silently breaking when running as non-root
