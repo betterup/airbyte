@@ -19,9 +19,8 @@ ENV PATH=$REQUIREPATH
 RUN pip install --upgrade pip setuptools wheel && \
     # Fix for PyYAML build bug related to Cython 3.0
     # https://github.com/yaml/pyyaml/issues/601
-    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
     pip install snowflake-connector-python --no-use-pep517 && \
-    pip install dbt-core dbt-snowflake 
+    pip install dbt-core dbt-snowflake --no-build-isolation
 
 COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte
 

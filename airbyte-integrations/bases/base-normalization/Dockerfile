@@ -17,8 +17,7 @@ ENV PATH=$REQUIREPATH
 RUN pip install --upgrade pip && \
     # Fix for PyYAML build bug related to Cython 3.0
     # https://github.com/yaml/pyyaml/issues/601
-    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
-    pip install dbt-core
+    pip install dbt-core --no-build-isolation
 
 # installs airbyte dependencies
 COPY --from=airbyte/base-airbyte-protocol-python:0.1.1 /airbyte /airbyte

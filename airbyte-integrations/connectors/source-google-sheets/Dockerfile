@@ -1,5 +1,12 @@
 FROM python:3.9-alpine3.18 as base
 
+RUN apk add --update --no-cache \
+    build-base \
+    openssl-dev \
+    libffi-dev \
+    zlib-dev \
+    bzip2-dev
+
 # build and load all requirements
 FROM base as builder
 WORKDIR /airbyte/integration_code
@@ -12,11 +19,12 @@ RUN apk --no-cache upgrade \
 
 COPY setup.py ./
 # install necessary packages to a temporary folder
+RUN pip install wheel --upgrade
 RUN \
     # Fix for PyYAML build bug related to Cython 3.0
     # https://github.com/yaml/pyyaml/issues/601
-    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
-    pip install --prefix=/install .
+    pip install poetry && \
+    pip install --prefix=/install . --no-build-isolation
 
 # build a clean environment
 FROM base

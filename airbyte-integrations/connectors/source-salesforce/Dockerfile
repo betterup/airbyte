@@ -23,8 +23,7 @@ COPY main.py ./
 RUN pip install --upgrade pip setuptools wheel && \
     # Fix for PyYAML build bug related to Cython 3.0
     # https://github.com/yaml/pyyaml/issues/601
-    pip install "Cython<3.0" "pyyaml<6" --no-build-isolation && \
-    pip install .
+    pip install . --no-build-isolation
 
 RUN pip uninstall setuptools -y && \
     pip uninstall pip -y
