@@ -17,6 +17,9 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 ENV PATH=$REQUIREPATH
 
 RUN pip install --upgrade pip setuptools wheel && \
+    # new cython breaking PyYAML
+    # https://github.com/yaml/pyyaml/issues/601
+    pip install "cython<3.0.0" && \
     # Fix for PyYAML build bug related to Cython 3.0
     # https://github.com/yaml/pyyaml/issues/601
     pip install snowflake-connector-python --no-use-pep517 && \
