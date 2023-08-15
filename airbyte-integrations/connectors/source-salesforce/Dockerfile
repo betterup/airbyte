@@ -20,10 +20,13 @@ WORKDIR /airbyte/integration_code
 COPY source_salesforce ./source_salesforce
 COPY setup.py ./
 COPY main.py ./
+
 RUN pip install --upgrade pip setuptools wheel && \
-    # Fix for PyYAML build bug related to Cython 3.0
-    # https://github.com/yaml/pyyaml/issues/601
-    pip install . --no-build-isolation
+    # workaround for https://github.com/yaml/pyyaml/issues/601
+    # this should be fixed in the airbyte/base-airbyte-protocol-python image
+    pip install "Cython<3.0" "pyyaml==5.4" --no-build-isolation && \
+    pip install numpy && \
+    pip install .
 
 RUN pip uninstall setuptools -y && \
     pip uninstall pip -y
