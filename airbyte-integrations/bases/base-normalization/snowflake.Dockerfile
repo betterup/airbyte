@@ -64,7 +64,4 @@ RUN pip uninstall setuptools -y && \
     PATH=$ROOTPATH pip uninstall setuptools -y && \
     pip uninstall pip -y && \
     PATH=$ROOTPATH pip uninstall pip -y && \
-    rm -rf /usr/local/lib/python3.10/ensurepip && \
-    apk --purge del apk-tools py-pip && \
-    # remove unnecessary private keys
-    find /opt/ /usr/ -name '*.pem' | grep test | xargs rm
+    apk --purge del apk-tools py-pip
