@@ -14,7 +14,7 @@ RUN PATH=$ROOTPATH python -m venv /opt/.venv
 
 ENV PATH=$REQUIREPATH
 
-RUN pip install --upgrade pip && \
+RUN pip install --upgrade pip wheel && \
     # Fix for PyYAML build bug related to Cython 3.0
     # https://github.com/yaml/pyyaml/issues/601
     pip install dbt-core --no-build-isolation
@@ -33,6 +33,11 @@ COPY dbt-project-template/ ./dbt-template/
 
 # Install python dependencies
 WORKDIR /airbyte/base_python_structs
+
+# workaround for https://github.com/yaml/pyyaml/issues/601
+# this should be fixed in the airbyte/base-airbyte-protocol-python image
+RUN pip install "Cython<3.0" "pyyaml==5.4" --no-build-isolation
+
 RUN pip install .
 
 WORKDIR /airbyte/normalization_code
@@ -59,8 +64,6 @@ RUN pip uninstall setuptools -y && \
     pip uninstall pip -y && \
     PATH=$ROOTPATH pip uninstall pip -y && \
     rm -rf /usr/local/lib/python3.10/ensurepip && \
-    apk --purge del apk-tools py-pip && \
-    # remove unnecessary private keys
-    find /opt/ /usr/ -name '*.pem' | grep test | xargs rm
+    apk --purge del apk-tools py-pip
 
 USER dbt_user
