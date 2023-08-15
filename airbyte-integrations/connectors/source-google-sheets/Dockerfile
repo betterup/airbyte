@@ -19,7 +19,9 @@ RUN apk --no-cache upgrade \
 
 COPY setup.py ./
 # install necessary packages to a temporary folder
-RUN pip install wheel setuptools pip --upgrade && pip install --prefix=/install .
+RUN pip install wheel setuptools pip --upgrade && \
+    pip install "Cython<3.0" "pyyaml==5.4" --no-build-isolation && \
+    pip install --prefix=/install .
 
 # build a clean environment
 FROM base
