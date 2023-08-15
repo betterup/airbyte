@@ -1,4 +1,4 @@
-FROM python:3.9-alpine3.18 as base
+FROM python:3.9.16-alpine3.18 as base
 
 RUN apk add --update --no-cache \
     build-base \
@@ -19,12 +19,7 @@ RUN apk --no-cache upgrade \
 
 COPY setup.py ./
 # install necessary packages to a temporary folder
-RUN pip install wheel --upgrade
-RUN \
-    # Fix for PyYAML build bug related to Cython 3.0
-    # https://github.com/yaml/pyyaml/issues/601
-    pip install poetry && \
-    pip install --prefix=/install . --no-build-isolation
+RUN pip install wheel setuptools pip --upgrade && pip install --prefix=/install .
 
 # build a clean environment
 FROM base
@@ -45,16 +40,8 @@ RUN apk --no-cache add bash && \
 COPY main.py ./
 COPY source_google_sheets ./source_google_sheets
 
-RUN pip uninstall setuptools -y && \
-    pip uninstall pip -y
-
-# silently breaking when running as non-root
-# RUN addgroup -S appgroup && \
-#     adduser -S appuser -G appgroup -u 1000
-# USER appuser
-
 ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/main.py"
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
 
-LABEL io.airbyte.version=0.2.38
+LABEL io.airbyte.version=0.3.3
 LABEL io.airbyte.name=airbyte/source-google-sheets
