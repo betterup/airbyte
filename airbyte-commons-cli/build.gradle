@@ -2,6 +2,16 @@ plugins {
     id "java-library"
 }
 
+configurations.all {
+    resolutionStrategy {
+        // Forcing jetty-io https://nvd.nist.gov/vuln/detail/CVE-2023-26048
+        // Forcing jose4j due to know vulnerabilities https://github.com/advisories/GHSA-jgvc-jfgh-rjvv
+        // Forcing jetty-server https://nvd.nist.gov/vuln/detail/CVE-2023-26048 and https://nvd.nist.gov/vuln/detail/CVE-2023-26049
+        // Forcing netty-codec-http https://nvd.nist.gov/vuln/detail/CVE-2022-41915
+        force libs.bouncy.castle
+    }
+}
+
 dependencies {
     implementation 'commons-cli:commons-cli:1.4'
 }
