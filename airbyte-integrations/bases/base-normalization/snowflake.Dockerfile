@@ -58,7 +58,7 @@ LABEL io.airbyte.version=0.2.5
 LABEL io.airbyte.name=airbyte/normalization-snowflake
 
 # patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
-RUN pip install sqlparse==0.4.4 &&
+RUN pip install sqlparse==0.4.4 && \
     # ensures `yaml` module is found
     pip install "Cython<3.0" "PyYAML==5.4" --no-build-isolation
 
