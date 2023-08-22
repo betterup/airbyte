@@ -20,7 +20,7 @@ RUN pip install --upgrade pip setuptools wheel
 
 # new cython breaking PyYAML
 # https://github.com/yaml/pyyaml/issues/601
-RUN pip install "Cython<3.0" "pyyaml==5.4" --no-build-isolation && \
+RUN pip install "Cython<3.0" "PyYAML==5.4" --no-build-isolation && \
     pip install snowflake-connector-python --no-use-pep517 && \
     pip install dbt-core dbt-snowflake --no-build-isolation
 
@@ -58,7 +58,9 @@ LABEL io.airbyte.version=0.2.5
 LABEL io.airbyte.name=airbyte/normalization-snowflake
 
 # patch for https://nvd.nist.gov/vuln/detail/CVE-2023-30608
-RUN pip install sqlparse==0.4.4
+RUN pip install sqlparse==0.4.4 &&
+    # ensures `yaml` module is found
+    pip install "Cython<3.0" "PyYAML==5.4" --no-build-isolation
 
 RUN pip uninstall setuptools -y && \
     PATH=$ROOTPATH pip uninstall setuptools -y && \
