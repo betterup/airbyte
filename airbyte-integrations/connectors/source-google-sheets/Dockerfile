@@ -44,8 +44,7 @@ COPY source_google_sheets ./source_google_sheets
 
 # redundant install step to ensure dependencies available
 RUN pip install wheel setuptools pip --upgrade && \
-    pip install "Cython<3.0" "pyyaml==5.4" --no-build-isolation && \
-    pip install --prefix=/install .
+    pip install "Cython<3.0" "pyyaml==5.4" --no-build-isolation
 
 ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/main.py"
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
