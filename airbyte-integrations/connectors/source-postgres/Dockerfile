@@ -25,3 +25,21 @@ RUN addgroup -S appgroup && \
 
 LABEL io.airbyte.version=2.0.28
 LABEL io.airbyte.name=airbyte/source-postgres
+
+# Removes vulnerabilities flagged in Prisma
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-34455
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-34454
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-34453
+RUN rm /airbyte/lib/snappy-java-1.1.8.4.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-2976
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2020-8908
+RUN rm /airbyte/lib/auto-value-1.10.1.jar
+RUN rm /airbyte/lib/guava-32.1.2-jre.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-34462
+RUN rm /airbyte/lib/netty-codec-4.1.92.Final.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-34462
+RUN rm rm /airbyte/lib/netty-handler-4.1.92.Final.jar
