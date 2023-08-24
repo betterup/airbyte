@@ -42,4 +42,4 @@ RUN rm /airbyte/lib/guava-32.1.2-jre.jar
 RUN rm /airbyte/lib/netty-codec-4.1.92.Final.jar
 
 # CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-34462
-RUN rm rm /airbyte/lib/netty-handler-4.1.92.Final.jar
+RUN rm /airbyte/lib/netty-handler-4.1.92.Final.jar
