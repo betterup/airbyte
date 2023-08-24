@@ -30,6 +30,12 @@ LABEL io.airbyte.name=airbyte/destination-snowflake
 
 # Removes vulnerabilities flagged in Prisma
 
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2020-28052
+RUN rm /airbyte/lib/bcprov-jdk15on-1.66.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-1370
+RUN rm /airbyte/lib/nimbus-jose-jwt-9.8.1.jar
+
 # CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-34455
 RUN rm /airbyte/lib/snappy-java-1.1.8.3.jar
 
