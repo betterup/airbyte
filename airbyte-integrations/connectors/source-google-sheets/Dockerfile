@@ -49,5 +49,8 @@ RUN pip install wheel setuptools pip --upgrade && \
 ENV AIRBYTE_ENTRYPOINT "python /airbyte/integration_code/main.py"
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
 
+# cleanup pip/setuptools in both environments
+RUN pip uninstall setuptools pip -y
+
 LABEL io.airbyte.version=0.3.3
 LABEL io.airbyte.name=airbyte/source-google-sheets
