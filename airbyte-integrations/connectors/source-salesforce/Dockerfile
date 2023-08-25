@@ -29,7 +29,9 @@ RUN pip install --upgrade pip setuptools wheel && \
     pip install .
 
 RUN pip uninstall setuptools -y && \
-    pip uninstall pip -y
+    PATH=$ROOTPATH pip uninstall setuptools -y && \
+    pip uninstall pip -y &&\
+    PATH=$ROOTPATH pip uninstall pip -y
 
 # silently breaking when running as non-root
 # RUN addgroup -S appgroup && \
@@ -38,14 +40,6 @@ RUN pip uninstall setuptools -y && \
 
 ENV TZ UTC
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# cleanup pip/setuptools in both environments
-RUN pip uninstall setuptools -y &&\
-    PATH=$ROOTPATH pip uninstall setuptools -y &&\
-    pip uninstall pip -y &&\
-    PATH=$ROOTPATH pip uninstall pip -y &&\
-    rm -rf /usr/local/lib/python3.10/ensurepip &&\
-    apk --purge del apk-tools py-pip
 
 ENTRYPOINT ["python", "/airbyte/integration_code/main.py"]
 
