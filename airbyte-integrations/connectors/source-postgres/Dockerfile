@@ -46,3 +46,19 @@ RUN rm /airbyte/lib/netty-handler-4.1.92.Final.jar
 
 # CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-44487
 RUN rm /airbyte/lib/netty-codec-http2-4.1.86.Final.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-44487
+RUN rm /airbyte/lib/netty-codec-http2-4.1.86.Final.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-36478
+RUN rm /airbyte/lib/jetty-io-11.0.15.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-31418
+RUN rm /airbyte/lib/elasticsearch-7.17.6.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-31419
+RUN rm /airbyte/lib/elasticsearch-7.17.6.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-31417
+RUN rm /airbyte/lib/elasticsearch-7.17.6.jar
+
