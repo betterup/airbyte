@@ -72,3 +72,11 @@ RUN rm /airbyte/lib/netty-codec-4.1.86.Final.jar
 # CVE: https://nvd.nist.gov/vuln/detail/CVE-2022-41915
 RUN rm /airbyte/lib/netty-codec-http-4.1.86.Final.jar
 RUN rm /airbyte/lib/netty-codec-http2-4.1.86.Final.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-31418
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-31419
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-31417
+RUN rm /airbyte/lib/elasticsearch-7.17.6.jar
+
+# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-44981
+RUN rm /airbyte/lib/zookeeper-3.5.6.jar
