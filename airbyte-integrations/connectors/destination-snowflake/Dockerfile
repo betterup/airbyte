@@ -72,11 +72,3 @@ RUN rm /airbyte/lib/netty-codec-4.1.86.Final.jar
 # CVE: https://nvd.nist.gov/vuln/detail/CVE-2022-41915
 RUN rm /airbyte/lib/netty-codec-http-4.1.86.Final.jar
 RUN rm /airbyte/lib/netty-codec-http2-4.1.86.Final.jar
-
-# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-44487
-RUN rm /airbyte/lib/netty-codec-http2-4.1.94.Final.jar
-RUN rm /airbyte/lib/netty-codec-4.1.94.Final.jar
-RUN rm /airbyte/lib/netty-codec-4.1.96.Final.jar
-
-# CVE: https://nvd.nist.gov/vuln/detail/CVE-2023-4586
-RUN rm /airbyte/lib/netty-handler-4.1.96.Final.jar
