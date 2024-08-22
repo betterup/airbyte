@@ -26,3 +26,8 @@ COPY --from=build /airbyte /airbyte
 
 LABEL io.airbyte.version=3.1.7
 LABEL io.airbyte.name=airbyte/source-postgres
+
+FROM alpine:3.20.2
+
+COPY --from=build / /
+RUN apk update && apk upgrade
